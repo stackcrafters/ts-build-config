@@ -1,7 +1,7 @@
 {
   "name": "@stackcrafters/ts-build-config",
   "description": "A package that provides a base ts build configuration, with eslint, prettier, jest",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "config/index.js",
   "files": [
     "/config",
