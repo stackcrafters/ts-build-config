@@ -1,0 +1,40 @@
+{
+  "name": "@stackcrafters/ts-build-config",
+  "description": "A package that provides a base ts build configuration, with eslint, prettier, jest",
+  "version": "0.0.0",
+  "main": "config/index.js",
+  "files": [
+    "/config",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stackcrafters/ts-build-config.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "access": "restricted"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@eslint/compat": "^1.1.1",
+    "@eslint/eslintrc": "^3.1.0",
+    "@types/jest": "^29.5.13",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
+    "eslint": "^9.10.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.36.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc-a03254bc-20240905",
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "source-map-support": "^0.5.21",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.2"
+  },
+  "scripts": {
+    "update_deps": "npx npm-check-updates -u && npm install && npm update"
+  }
+}
