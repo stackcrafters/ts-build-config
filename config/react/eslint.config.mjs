@@ -1,61 +1,65 @@
-import reactHooks from 'eslint-plugin-react-hooks';
-import { fixupPluginRules } from '@eslint/compat';
-import tsParser from '@typescript-eslint/parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import { defineConfig } from 'eslint/config';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import tseslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
-});
+const reactFiles = ['**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}'];
+const unusedIgnorePatterns = {
+  argsIgnorePattern: '^_',
+  varsIgnorePattern: '^_',
+  caughtErrorsIgnorePattern: '^_'
+};
 
-export default [
-  ...compat.extends('plugin:react/recommended', 'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'),
+export default defineConfig(
+  js.configs.recommended,
+  tseslint.configs.recommended,
   {
-    plugins: {
-      'react-hooks': fixupPluginRules(reactHooks)
-    },
-
+    files: reactFiles,
+    ...reactPlugin.configs.flat.recommended
+  },
+  {
+    files: reactFiles,
+    ...reactPlugin.configs.flat['jsx-runtime']
+  },
+  reactHooks.configs.recommended,
+  {
+    files: reactFiles,
     languageOptions: {
-      parser: tsParser,
-      ecmaVersion: 2020,
+      ecmaVersion: 'latest',
       sourceType: 'module',
-
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true
-        }
+      globals: {
+        ...globals.browser,
+        ...globals.nodeBuiltin,
+        ...globals.jest
       }
     },
-
     settings: {
       react: {
         version: 'detect'
       }
     },
-
     rules: {
-      'prettier/prettier': 'warn',
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-      'react/display-name': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-inferrable-types': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn', unusedIgnorePatterns],
       '@typescript-eslint/no-unused-expressions': [
         'error',
         {
           allowShortCircuit: true
         }
       ],
-      'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
+      'react/display-name': 'off',
       'react/prop-types': 'off'
     }
+  },
+  eslintPluginPrettierRecommended,
+  {
+    files: reactFiles,
+    rules: {
+      'prettier/prettier': 'warn'
+    }
   }
-];
+);
