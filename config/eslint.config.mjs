@@ -1,32 +1,47 @@
-import tsParser from '@typescript-eslint/parser';
-import js from "@eslint/js";
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
-import globals from "globals";
+import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
-export default [
+const unusedIgnorePatterns = {
+  argsIgnorePattern: '^_',
+  varsIgnorePattern: '^_',
+  caughtErrorsIgnorePattern: '^_'
+};
+
+export default defineConfig(
   js.configs.recommended,
-  eslintPluginPrettierRecommended,
+  tseslint.configs.recommended,
   {
     languageOptions: {
-      parser: tsParser,
-      ecmaVersion: 2020,
+      ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.node,
+        ...globals.nodeBuiltin,
         ...globals.jest
       }
-    },
-
+    }
+  },
+  {
+    files: ['**/*.{js,mjs,cjs,jsx}'],
     rules: {
-      'prettier/prettier': 'warn',
-      'no-explicit-any': 'off',
-      'no-inferrable-types': 'off',
-      'no-unused-vars': ['warn', {
-        "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "^_",
-        "caughtErrorsIgnorePattern": "^_"
-      }]
+      'no-unused-vars': ['warn', unusedIgnorePatterns]
+    }
+  },
+  {
+    files: ['**/*.{ts,mts,cts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-inferrable-types': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn', unusedIgnorePatterns]
+    }
+  },
+  eslintPluginPrettierRecommended,
+  {
+    rules: {
+      'prettier/prettier': 'warn'
     }
   }
-];
+);

@@ -1,12 +1,9 @@
-const { jsWithTs: tsjPreset } = require('ts-jest/presets');
+const { createJsWithTsPreset } = require('ts-jest');
 
 module.exports = {
-    roots: ["<rootDir>/src"],
-    testRegex: '(.*\\.test\\.(ts|js))$',
-    transform: {
-        ...tsjPreset.transform,
-        '^.+\\.(j|t)sx?$': 'esbuild-jest'
-    },
-    moduleDirectories: ['node_modules', 'src'],
-    moduleFileExtensions: ['ts', 'js', 'jsx', 'json', 'node']
+  ...createJsWithTsPreset(),
+  roots: ['<rootDir>/src'],
+  testMatch: ['**/*.test.[jt]s?(x)'],
+  moduleDirectories: ['node_modules', 'src'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node']
 };
